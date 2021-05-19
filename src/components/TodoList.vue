@@ -45,7 +45,7 @@ i{
 }
 
 .cross{
-  color: red;
+  color: var(--color-red);
 }
 
 .fas {
@@ -55,12 +55,13 @@ i{
 .container {
   width: 40vw;
   padding: 0 20px 20px 20px;
-  border: 1px solid black;
   border-radius: 10px;
+  background: var(--color-rosa);
+  box-shadow:  1px 5px 5px #ccc;
 }
 
 .todo {
-  background: #eee;
+  background: var(--color-white);
 }
 
 .wip {

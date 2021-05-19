@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import "./variables.css"
 import axios from "axios";
 import TodoList from "./components/TodoList";
 import AddTask from "./components/AddTask";
@@ -46,7 +47,7 @@ export default {
         .then(({ data }) => {
           console.log(data);
           this.reloadData();
-          this.showAddTask = false
+          this.showAddTask = false;
         });
     },
     reloadData() {
@@ -107,9 +108,12 @@ export default {
   margin: 60px 30px 0 30px;
 }
 
-:root{
-  --color-green: #65C89B
+body{
+  background: var(--color-grey);
+
 }
+
+
 
 .overlay {
   position: absolute;
@@ -124,12 +128,21 @@ export default {
 .allCategories {
   display: flex;
   flex-wrap: wrap;
-  /* flex-direction: row; */
+  gap: 20px;
+  margin-top: 20px;
+
 }
 
 .oneCategorie {
   display: flex;
   flex-direction: row;
-  margin: 10px;
+}
+
+button {
+  border-radius: 25px;
+  padding: 12px 25px;
+  background: var(--color-blue);
+  border: 0px;
+  color: var(--color-darkopal);
 }
 </style>
