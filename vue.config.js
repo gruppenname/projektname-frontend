@@ -1,6 +1,13 @@
 // vue.config.js
 module.exports = {
     devServer: {
-          proxy: 'http://localhost:5000/',
-      }
-  }
+        overlay: {
+            warnings: false,
+            errors: false
+        },
+        compress: false,
+        disableHostCheck: true,
+        port: 8080,
+        host: '0.0.0.0'
+    }
+}
