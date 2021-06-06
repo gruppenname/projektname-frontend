@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>{{ category }}<button>+</button></h2>
+    <h2>{{ category }}</h2>
 
     <div :key="todo.id" v-for="todo in todos">
       <div
@@ -14,15 +14,23 @@
           'todoDefault',
         ]"
       >
-        <div class="circleCheck" @click="$emit('toggle-check', todo.id, todo.column)">
+        <div
+          class="circleCheck"
+          @click="$emit('toggle-check', todo.id, todo.column)"
+        >
           <i
-            :class="[todo.column == 'DONE' ? 'far fa-check-circle' : 'far fa-circle']"
+            :class="[
+              todo.column == 'DONE' ? 'far fa-check-circle' : 'far fa-circle',
+            ]"
           ></i>
         </div>
         <div class="todoText">
           <h3>
             {{ todo.title }}
-            <i @click="$emit('delete-todo', todo.id)" class="fas fa-times cross"></i>
+            <i
+              @click="$emit('delete-todo', todo.id)"
+              class="fas fa-times cross"
+            ></i>
           </h3>
           <p>{{ todo.content }}</p>
         </div>
@@ -31,20 +39,26 @@
   </div>
 </template>
 <script>
+// import AddTask from './AddTask';
 export default {
-  name: "todoList",
+  name: 'todoList',
   props: {
     todos: Array,
     category: String,
+    showAddTask: Boolean,
+  },
+
+  components: {
+    // AddTask,
   },
 };
 </script>
 <style scoped>
-i{
+i {
   cursor: pointer;
 }
 
-.cross{
+.cross {
   color: var(--color-red);
 }
 
@@ -57,7 +71,7 @@ i{
   padding: 0 20px 20px 20px;
   border-radius: 10px;
   background: var(--color-rosa);
-  box-shadow:  1px 5px 5px #ccc;
+  box-shadow: 1px 5px 5px #ccc;
 }
 
 .todo {
@@ -70,7 +84,7 @@ i{
 }
 
 .done {
-  background: #ff735d;
+  background: #b3e6cf;
 }
 
 .todoDefault {
@@ -88,8 +102,8 @@ i{
   justify-content: space-between;
 }
 
-.todoText{
-  width: 100%
+.todoText {
+  width: 100%;
 }
 
 .container h2 {
@@ -98,7 +112,7 @@ i{
   justify-content: space-between;
 }
 
-.circleCheck{
+.circleCheck {
   display: flex;
   align-items: center;
   margin-right: 8px;

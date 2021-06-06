@@ -21,52 +21,59 @@
       </div>
       <div class="form-control">
         <label>Category</label>
-        <input
-          type="text"
-          v-model="category"
-          name="category"
-          placeholder="Add category"
-        />
+        <select :selected="categoryOfList == category">
+          <option
+            v-for="category in categories"
+            :key="category"
+            :value="category"
+          >
+            {{ category }}
+          </option>
+        </select>
       </div>
 
-      <input type="submit" value="Save Todo" class="btn btn-block" />
+      <input type="submit" value="Save Todo" class="button" />
     </form>
   </transition>
 </template>
 
 <script>
 export default {
-  name: "AddTask",
+  name: 'AddTask',
   data() {
     return {
-      title: "",
-      content: "",
-      category: "",
+      title: '',
+      content: '',
+      categoryComponent: '',
+      value: '',
+      selected: '',
+      // categories: [],
     };
   },
   props: {
     showAddTask: Boolean,
+    categories: Array,
+    categoryOfList: String,
   },
 
   methods: {
     onSubmit(e) {
       e.preventDefault();
-      //   if (!this.title) {
-      //     alert("Please add a task");
-      //     return;
-      //   }
+      if (!this.title) {
+        alert('Please add a task');
+        return;
+      }
       const newTodo = {
         title: this.title,
         content: this.content,
-        column: "TODO",
-        category: this.category,
+        column: 'TODO',
+        category: this.selected,
       };
-      console.log(newTodo);
-      this.$emit("add-todo", newTodo);
-      this.title = "";
-      this.content = "";
-      this.category = "";
-      this.showAddTask = false
+      this.$emit('add-todo', newTodo);
+      this.title = '';
+      this.content = '';
+      this.category = '';
+      this.showAddTask = false;
     },
   },
 };
@@ -78,14 +85,14 @@ export default {
   position: fixed;
   top: 25%;
   left: 25%;
-  background-color: #65C89B;
+  background-color: #65c89b;
   transform: translate(-25%, -50%);
   z-index: 99;
   width: 100%;
   max-width: 400px;
   border-radius: 10px;
   padding: 30px;
-  border: 1px solid #999
+  border: 1px solid #999;
 }
 .form-control {
   margin: 20px 0;
@@ -100,6 +107,15 @@ export default {
   padding: 3px 7px;
   font-size: 17px;
 }
+
+.form-control select {
+  width: 99%;
+  height: 40px;
+  margin: 5px;
+  padding: 3px 7px;
+  font-size: 17px;
+}
+
 .form-control-check {
   display: flex;
   align-items: center;

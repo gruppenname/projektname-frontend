@@ -2,10 +2,6 @@
   <div id="app">
     <h1>To Do List</h1>
     <button @click="toggleAddTodo">Add Todo</button>
-    <div v-if="showAddTask">
-      <div class="overlay" v-if="showAddTask" @click="toggleAddTodo"></div>
-      <AddTask @add-todo="addTodo" />
-    </div>
     <!-- for each category a new container to split them -->
     <div class="allCategories">
       <div class="oneCategorie" :key="category" v-for="category in categories">
@@ -13,23 +9,33 @@
           :todos="todos"
           @delete-todo="deleteTodo"
           @toggle-check="toogleCheck"
+          @toggle-add-todo="toggleAddTodo"
           :category="category"
+          :showAddTask="showAddTask"
         />
+        <div v-if="showAddTask">
+          <div class="overlay" v-if="showAddTask" @click="toggleAddTodo"></div>
+          <AddTask
+            @add-todo="addTodo"
+            :categoryOfList="category"
+            :categories="categories"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import "./variables.css"
-import axios from "axios";
-import TodoList from "./components/TodoList";
-import AddTask from "./components/AddTask";
+import './variables.css';
+import axios from 'axios';
+import TodoList from './components/TodoList';
+import AddTask from './components/AddTask';
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
-      baseURL: "http://localhost:8080",
+      baseURL: 'http://localhost:8080',
       todos: [],
       categories: [],
       showAddTask: false,
@@ -38,29 +44,28 @@ export default {
   methods: {
     addTodo(todo) {
       axios
-        .post(this.baseURL + "/todos", {
+        .post(this.baseURL + '/todos', {
           title: todo.title,
           content: todo.content,
           column: todo.column,
           category: todo.category,
         })
-        .then(({ data }) => {
-          console.log(data);
+        .then(() => {
           this.reloadData();
           this.showAddTask = false;
         });
     },
     reloadData() {
-      axios.get(this.baseURL + "/todos").then(({ data }) => {
+      axios.get(this.baseURL + '/todos').then(({ data }) => {
         this.todos = data.todos;
         this.filterCategories(this.todos);
       });
     },
     deleteTodo(id) {
       // axios delete methode
-      axios.delete(this.baseURL + "/todos/" + id).then(({ data }) => {
-        console.log(data);
+      axios.delete(this.baseURL + '/todos/' + id).then(() => {
         this.todos = this.todos.filter((todo) => todo.id !== id);
+        this.reloadData();
       });
     },
     filterCategories(todosList) {
@@ -71,12 +76,11 @@ export default {
       this.categories = [...new Set(arrayCategories)];
     },
     toogleCheck(id, column) {
-      console.log(id, column);
-      let state = "";
-      if (column === "DONE") {
-        state = "TODO";
-      } else if (column === "TODO") {
-        state = "DONE";
+      let state = '';
+      if (column === 'DONE') {
+        state = 'TODO';
+      } else if (column === 'TODO') {
+        state = 'DONE';
       }
       this.todos = this.todos.map((todo) =>
         todo.id === id ? { ...todo, column: state } : todo
@@ -91,7 +95,7 @@ export default {
     AddTask,
   },
   created() {
-    axios.get(this.baseURL + "/todos").then(({ data }) => {
+    axios.get(this.baseURL + '/todos').then(({ data }) => {
       this.todos = data.todos;
       this.filterCategories(this.todos);
     });
@@ -108,12 +112,9 @@ export default {
   margin: 60px 30px 0 30px;
 }
 
-body{
+body {
   background: var(--color-grey);
-
 }
-
-
 
 .overlay {
   position: absolute;
@@ -130,7 +131,6 @@ body{
   flex-wrap: wrap;
   gap: 20px;
   margin-top: 20px;
-
 }
 
 .oneCategorie {
@@ -138,11 +138,30 @@ body{
   flex-direction: row;
 }
 
-button {
+button,
+.button {
   border-radius: 25px;
   padding: 12px 25px;
   background: var(--color-blue);
   border: 0px;
   color: var(--color-darkopal);
+}
+
+button:hover,
+.button:hover {
+  background-color: #a4aab3;
+  cursor: pointer;
+}
+
+label {
+  margin-left: 5px;
+}
+
+::placeholder {
+  font-size: 14px;
+}
+
+.button {
+  margin-left: 5px;
 }
 </style>
