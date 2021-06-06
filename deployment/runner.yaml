@@ -33,7 +33,7 @@ spec:
             - name: RUNNER_NAME
               value: "gruppenname-frontend-runner"
             - name: RUNNER_TOKEN
-              value: "AMYYM6GKIQLWR5RWMEISGJDAXS52Y"
+              value: "xxx"
             - name: RUNNER_REPOSITORY_URL
               value: "<https://github.com/gruppenname/projektname-frontend"
             - name: RUNNER_WORK_DIRECTORY
