@@ -35,7 +35,7 @@ spec:
             - name: RUNNER_TOKEN
               value: "xxx"
             - name: RUNNER_REPOSITORY_URL
-              value: "<https://github.com/gruppenname/projektname-frontend"
+              value: "https://github.com/gruppenname/projektname-frontend"
             - name: RUNNER_WORK_DIRECTORY
               value: "/tmp/gruppenname-frontend-runner"
           volumeMounts:
