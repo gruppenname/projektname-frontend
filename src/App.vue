@@ -110,7 +110,6 @@ export default {
 
 body{
   background: var(--color-grey);
-
 }
 
 
