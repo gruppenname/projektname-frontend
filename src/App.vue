@@ -35,7 +35,7 @@ export default {
   name: 'App',
   data() {
     return {
-      baseURL: 'http://localhost:8080',
+      baseURL: "https://gruppenname.demo.datexis.com",
       todos: [],
       categories: [],
       showAddTask: false,

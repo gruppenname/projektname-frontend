@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gruppenname-frontend-runner
+  namespace: sachs
+  labels:
+    app: gruppenname-frontend-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gruppenname-frontend-runner
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gruppenname-frontend-runner
+    spec:
+      initContainers:
+        - name: volume-mount-hack
+          image: busybox
+          command: ["sh", "-c", "chmod -R 777 /tmp/gruppenname-frontend-runner"]
+          volumeMounts:
+            - name: work
+              mountPath: "/tmp/gruppenname-frontend-runner"
+      containers:
+        - name: github-runner
+          image: tcardonne/github-runner
+          securityContext:
+            privileged: true
+          env:
+            - name: RUNNER_NAME
+              value: "gruppenname-frontend-runner"
+            - name: RUNNER_TOKEN
+              value: "xxx"
+            - name: RUNNER_REPOSITORY_URL
+              value: "https://github.com/gruppenname/projektname-frontend"
+            - name: RUNNER_WORK_DIRECTORY
+              value: "/tmp/gruppenname-frontend-runner"
+          volumeMounts:
+            - name: work
+              mountPath: "/tmp/gruppenname-frontend-runner"
+            - name: dockersock
+              mountPath: "/var/run/docker.sock"
+      volumes:
+        - name: work
+          hostPath:
+            path: "/tmp/gruppenname-frontend-runner"
+        - name: dockersock
+          hostPath:
+            path: "/var/run/docker.sock"
