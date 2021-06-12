@@ -3,7 +3,7 @@ This is the frontend for a small Todo-List in Vuejs.
 ### Clone Repository
 
 ```bash
-git clone git@github.com:abiodunjames/NodeJs-Todo-List.git
+git clone https://github.com/gruppenname/projektname-frontend.git
 
 ```
 ## Project setup
