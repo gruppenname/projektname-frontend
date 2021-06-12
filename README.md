@@ -1,5 +1,11 @@
 # projektname-frontend
-Frontend für Projektname
+This is the frontend for a small Todo-List in Vuejs.
+### Clone Repository
+
+```bash
+git clone git@github.com:abiodunjames/NodeJs-Todo-List.git
+
+```
 ## Project setup
 ```
 npm install
@@ -19,9 +25,7 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Access the app from your browser at http://localhost:8080
 
 
 ## Deployment
