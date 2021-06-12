@@ -13,8 +13,12 @@
             : 'done',
           'todoDefault',
         ]"
+        @dblclick="test"
+        @mouseover="showPen = true"
+        @mouseout="showPen = false"
       >
         <div
+          v-if="!updateMode"
           class="circleCheck"
           @click="$emit('toggle-check', todo.id, todo.column)"
         >
@@ -24,32 +28,62 @@
             ]"
           ></i>
         </div>
-        <div class="todoText">
+        <div class="todoText" v-if="!updateMode">
           <h3>
             {{ todo.title }}
-            <i
-              @click="$emit('delete-todo', todo.id)"
-              class="fas fa-times cross"
-            ></i>
+            <div>
+              <i
+                v-show="showPen"
+                class="fas fa-pen"
+                @click="toggleUpdate(todo)"
+              ></i>
+              <i
+                @click="$emit('delete-todo', todo.id)"
+                class="fas fa-times cross"
+              ></i>
+            </div>
           </h3>
           <p>{{ todo.content }}</p>
+        </div>
+        <div class="update" v-if="updateMode">
+          <div>
+            <input class="headerInput" type="text" v-model="inputHeader" />
+            <input type="text" v-model="inputDescription"/>
+          </div>
+          <i class="fas fa-check" @click="updateTodo(todo.id)"></i>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-// import AddTask from './AddTask';
 export default {
   name: 'todoList',
+  data() {
+    return {
+      showPen: false,
+      updateMode: false,
+      inputHeader: '',
+      inputDescription: '',
+    };
+  },
   props: {
     todos: Array,
     category: String,
     showAddTask: Boolean,
   },
-
-  components: {
-    // AddTask,
+  methods: {
+    test(id) {
+      console.log(id);
+    },
+    toggleUpdate(todo) {
+      this.updateMode = !this.updateMode;
+      this.inputHeader = todo.content;
+      this.inputDescription = todo.title;
+    },
+    updateTodo() {
+      this.updateMode = !this.updateMode;
+    },
   },
 };
 </script>
@@ -58,12 +92,45 @@ i {
   cursor: pointer;
 }
 
+.fa-check {
+  color: #65c89b;
+}
+
+.update input {
+  display: block;
+  width: 95%;
+  font-size: 16px;
+  padding: 2px 5px;
+  margin: 5px 0;
+  flex: 1;
+}
+
+.headerInput {
+  font-weight: bold;
+  font-size: 18px !important;
+}
+
+.update div {
+  width: 100%;
+}
+
+.update {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .cross {
   color: var(--color-red);
 }
 
 .fas {
   cursor: pointer;
+}
+
+.fa-pen {
+  margin-right: 10px;
+  font-size: 15px;
 }
 
 .container {

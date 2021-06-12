@@ -20,16 +20,39 @@
         />
       </div>
       <div class="form-control">
-        <label>Category</label>
-        <select :selected="categoryOfList == category">
+        <label
+          >Category
+          <button
+            class="addCategory"
+            @click.prevent="toggleInputCategory"
+            v-if="
+              showInputNewCategory
+                ? (buttonText = 'Choose from categories')
+                : (buttonText = 'Add new category')
+            "
+          >
+            {{ buttonText }}
+          </button>
+        </label>
+
+        <select v-model="category" v-if="!showInputNewCategory">
           <option
             v-for="category in categories"
             :key="category"
-            :value="category"
+            :selected="categoryOfList"
           >
             {{ category }}
           </option>
         </select>
+
+        <div v-if="showInputNewCategory">
+          <input
+            v-model="category"
+            type="text"
+            name="category"
+            placeholder="Add category"
+          />
+        </div>
       </div>
 
       <input type="submit" value="Save Todo" class="button" />
@@ -44,10 +67,11 @@ export default {
     return {
       title: '',
       content: '',
-      categoryComponent: '',
+      category: '',
       value: '',
       selected: '',
-      // categories: [],
+      showInputNewCategory: false,
+      buttonText: 'Add new category',
     };
   },
   props: {
@@ -67,13 +91,16 @@ export default {
         title: this.title,
         content: this.content,
         column: 'TODO',
-        category: this.selected,
+        category: this.category,
       };
       this.$emit('add-todo', newTodo);
       this.title = '';
       this.content = '';
       this.category = '';
       this.showAddTask = false;
+    },
+    toggleInputCategory() {
+      this.showInputNewCategory = !this.showInputNewCategory;
     },
   },
 };
@@ -83,8 +110,8 @@ export default {
 .add-form {
   margin-bottom: 40px;
   position: fixed;
-  top: 25%;
-  left: 25%;
+  top: 35%;
+  left: 35%;
   background-color: #65c89b;
   transform: translate(-25%, -50%);
   z-index: 99;
@@ -97,9 +124,7 @@ export default {
 .form-control {
   margin: 20px 0;
 }
-.form-control label {
-  display: block;
-}
+
 .form-control input {
   width: 95%;
   height: 40px;
@@ -123,9 +148,19 @@ export default {
 }
 .form-control-check label {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .form-control-check input {
   flex: 2;
   height: 20px;
+}
+
+label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

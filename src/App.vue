@@ -55,6 +55,9 @@ export default {
           this.showAddTask = false;
         });
     },
+    // updateTodo(id, todo){
+
+    // },
     reloadData() {
       axios.get(this.baseURL + '/todos').then(({ data }) => {
         this.todos = data.todos;
