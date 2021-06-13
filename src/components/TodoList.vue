@@ -14,13 +14,19 @@
           'todoDefault',
         ]"
         @dblclick="test"
-        @mouseover="showPen = true"
-        @mouseout="showPen = false"
+        @mouseenter="showPen = todo.id"
+        @mouseleave="showPen = ''"
       >
         <div
           v-if="!updateMode"
           class="circleCheck"
-          @click="$emit('toggle-check', todo.id, todo.column)"
+          @click="
+            $emit(
+              'toggle-check',
+              todo.id,
+              todo.column == 'DONE' ? 'TODO' : 'DONE'
+            )
+          "
         >
           <i
             :class="[
@@ -28,12 +34,12 @@
             ]"
           ></i>
         </div>
-        <div class="todoText" v-if="!updateMode">
+        <div class="todoText" v-if="updateMode !== todo.id">
           <h3>
             {{ todo.title }}
             <div>
               <i
-                v-show="showPen"
+                v-show="showPen == todo.id"
                 class="fas fa-pen"
                 @click="toggleUpdate(todo)"
               ></i>
@@ -45,12 +51,13 @@
           </h3>
           <p>{{ todo.content }}</p>
         </div>
-        <div class="update" v-if="updateMode">
+        <div class="update" v-else>
           <div>
-            <input class="headerInput" type="text" v-model="inputHeader" />
-            <input type="text" v-model="inputDescription"/>
+            <input class="headerInput" type="text" v-model="inputTitle" />
+            <input type="text" v-model="inputContent" />
           </div>
-          <i class="fas fa-check" @click="updateTodo(todo.id)"></i>
+          <i class="fas fa-check" @click="updateTodo(todo)"></i>
+          <i @click="toggleUpdate(todo)" class="fas fa-times cross"></i>
         </div>
       </div>
     </div>
@@ -62,9 +69,9 @@ export default {
   data() {
     return {
       showPen: false,
-      updateMode: false,
-      inputHeader: '',
-      inputDescription: '',
+      updateMode: '',
+      inputTitle: '',
+      inputContent: '',
     };
   },
   props: {
@@ -77,12 +84,33 @@ export default {
       console.log(id);
     },
     toggleUpdate(todo) {
-      this.updateMode = !this.updateMode;
-      this.inputHeader = todo.content;
-      this.inputDescription = todo.title;
+      this.updateMode == todo.id
+        ? (this.updateMode = '')
+        : (this.updateMode = todo.id);
+      this.inputTitle = todo.title;
+      this.inputContent = todo.content;
     },
-    updateTodo() {
-      this.updateMode = !this.updateMode;
+    updateTodo(todo) {
+      let changed = false;
+      if (todo.title != this.inputTitle || todo.content != this.inputContent) {
+        changed = true;
+      }
+      if (!changed) {
+        alert('Keine Änderungen gefunden');
+        return;
+      }
+      let changedTodo = {
+        id: todo.id,
+        key: todo.key,
+        title: this.inputTitle,
+        content: this.inputContent,
+        column: todo.column,
+        category: todo.category,
+      };
+      this.$emit('update-todo', changedTodo);
+      this.updateMode == todo.id
+        ? (this.updateMode = '')
+        : (this.updateMode = todo.id);
     },
   },
 };
@@ -95,10 +123,13 @@ i {
 .fa-check {
   color: #65c89b;
 }
+.update i {
+  margin-left: 7px;
+}
 
 .update input {
   display: block;
-  width: 95%;
+  width: 90%;
   font-size: 16px;
   padding: 2px 5px;
   margin: 5px 0;

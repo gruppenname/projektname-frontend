@@ -2,33 +2,35 @@
   <transition name="addTaskForm" appear>
     <form @submit="onSubmit" class="add-form">
       <div class="form-control">
-        <label>Todo</label>
+        <label>Aufgabe</label>
         <input
+          autocomplete="off"
           type="text"
           v-model="title"
           name="title"
-          placeholder="Add Todo"
+          placeholder="Aufgabe hinzufügen"
         />
       </div>
       <div class="form-control">
-        <label>Description</label>
+        <label>Beschreibung</label>
         <input
           type="text"
+          autocomplete="off"
           v-model="content"
           name="content"
-          placeholder="Add description"
+          placeholder="Beschreibung hinzufügen"
         />
       </div>
       <div class="form-control">
         <label
-          >Category
+          >Kategorie
           <button
             class="addCategory"
             @click.prevent="toggleInputCategory"
             v-if="
               showInputNewCategory
-                ? (buttonText = 'Choose from categories')
-                : (buttonText = 'Add new category')
+                ? (buttonText = 'Kategorie auswählen')
+                : (buttonText = 'Neue Kategorie hinzufügen')
             "
           >
             {{ buttonText }}
@@ -36,10 +38,10 @@
         </label>
 
         <select v-model="category" v-if="!showInputNewCategory">
+          <option value="" disabled selected>Auswählen</option>
           <option
             v-for="category in categories"
             :key="category"
-            :selected="categoryOfList"
           >
             {{ category }}
           </option>
@@ -47,15 +49,16 @@
 
         <div v-if="showInputNewCategory">
           <input
+            autocomplete="off"
             v-model="category"
             type="text"
             name="category"
-            placeholder="Add category"
+            placeholder="Kategorie hinzufügen"
           />
         </div>
       </div>
 
-      <input type="submit" value="Save Todo" class="button" />
+      <input type="submit" value="Aufgabe speichern" class="button" />
     </form>
   </transition>
 </template>
@@ -84,7 +87,10 @@ export default {
     onSubmit(e) {
       e.preventDefault();
       if (!this.title) {
-        alert('Please add a task');
+        alert('Bitte Titel hinzufügen.');
+        return;
+      } else if (!this.category) {
+        alert('Bitte Kategorie hinzufügen.');
         return;
       }
       const newTodo = {

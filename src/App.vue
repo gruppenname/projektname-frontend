@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <h1>To Do List</h1>
-    <button @click="toggleAddTodo">Add Todo</button>
+    <h1>
+      To Do List
+      {{ error.message }}
+    </h1>
+    <button @click="toggleAddTodo">Aufgabe hinzufügen</button>
     <!-- for each category a new container to split them -->
     <div class="allCategories">
       <div class="oneCategorie" :key="category" v-for="category in categories">
         <TodoList
           :todos="todos"
           @delete-todo="deleteTodo"
-          @toggle-check="toogleCheck"
+          @toggle-check="toggleCheck"
           @toggle-add-todo="toggleAddTodo"
+          @update-todo="updateTodo"
           :category="category"
           :showAddTask="showAddTask"
         />
@@ -35,10 +39,14 @@ export default {
   name: 'App',
   data() {
     return {
-      baseURL: "https://gruppenname.demo.datexis.com",
+      baseURL: 'https://gruppenname.demo.datexis.com',
       todos: [],
       categories: [],
       showAddTask: false,
+      error: {
+        active: false,
+        message: '',
+      },
     };
   },
   methods: {
@@ -53,23 +61,67 @@ export default {
         .then(() => {
           this.reloadData();
           this.showAddTask = false;
+        }).catch(() => {
+          this.error = {
+            active: true,
+            message: 'Aufgabe konnte nicht hinzugefügt werden.',
+          };
         });
     },
-    // updateTodo(id, todo){
 
-    // },
+    toggleCheck(id, column) {
+      this.error.active = false;
+      axios
+        .put(this.baseURL + '/todos/' + id, {
+          column,
+        })
+        .then(() => {
+          this.reloadData();
+        })
+        .catch(() => {
+          this.error = {
+            active: true,
+            message: 'Status konnte nicht geändert werden.',
+          };
+        });
+    },
+    updateTodo(todo) {
+      console.log(todo);
+      console.log('update');
+      axios
+        .put(this.baseURL + '/todos/' + todo.id, {
+          title: todo.title,
+          content: todo.content,
+          column: todo.column,
+          category: todo.category,
+        })
+        .then(() => {
+          this.reloadData();
+        })
+        .catch(() => {
+          this.error = {
+            active: true,
+            message: 'Aufgabe konnte nicht geändert werden.',
+          };
+        });
+    },
     reloadData() {
       axios.get(this.baseURL + '/todos').then(({ data }) => {
         this.todos = data.todos;
         this.filterCategories(this.todos);
-      });
+      }).catch(() => {
+          this.error = {
+            active: true,
+            message: 'Daten konnten nicht geladen werden.',
+          };
+        });
     },
     deleteTodo(id) {
-      // axios delete methode
-      axios.delete(this.baseURL + '/todos/' + id).then(() => {
-        this.todos = this.todos.filter((todo) => todo.id !== id);
-        this.reloadData();
-      });
+      if (confirm('Willst du diese Aufgabe wirklich löschen?'))
+        axios.delete(this.baseURL + '/todos/' + id).then(() => {
+          this.todos = this.todos.filter((todo) => todo.id !== id);
+          this.reloadData();
+        });
     },
     filterCategories(todosList) {
       let arrayCategories = [];
