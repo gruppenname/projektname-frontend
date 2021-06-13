@@ -8,6 +8,6 @@ describe('AddTask.vue', () => {
   });
 
   it('does div exist', () => {
-    expect(wrapper.find('label').text()).toBe('Todo');
+    expect(wrapper.find('label').text()).toBe('Aufgabe');
   });
 });
