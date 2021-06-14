@@ -2,7 +2,9 @@
   <div id="app">
     <h1>
       To Do List
-      {{ error.message }}
+      <div class="errorMessage" v-if="error.active">
+        {{ error.message }}
+      </div>
     </h1>
     <button @click="toggleAddTodo">Aufgabe hinzufügen</button>
     <!-- for each category a new container to split them -->
@@ -61,7 +63,8 @@ export default {
         .then(() => {
           this.reloadData();
           this.showAddTask = false;
-        }).catch(() => {
+        })
+        .catch(() => {
           this.error = {
             active: true,
             message: 'Aufgabe konnte nicht hinzugefügt werden.',
@@ -106,10 +109,13 @@ export default {
         });
     },
     reloadData() {
-      axios.get(this.baseURL + '/todos').then(({ data }) => {
-        this.todos = data.todos;
-        this.filterCategories(this.todos);
-      }).catch(() => {
+      axios
+        .get(this.baseURL + '/todos')
+        .then(({ data }) => {
+          this.todos = data.todos;
+          this.filterCategories(this.todos);
+        })
+        .catch(() => {
           this.error = {
             active: true,
             message: 'Daten konnten nicht geladen werden.',
@@ -165,6 +171,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin: 60px 30px 0 30px;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+h1 div {
+  background-color: var(--color-red);
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 body {
