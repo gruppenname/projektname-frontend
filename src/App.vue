@@ -53,6 +53,7 @@ export default {
   },
   methods: {
     addTodo(todo) {
+      this.error.active = false;
       axios
         .post(this.baseURL + '/todos', {
           title: todo.title,
@@ -74,6 +75,7 @@ export default {
 
     toggleCheck(id, column) {
       this.error.active = false;
+
       axios
         .put(this.baseURL + '/todos/' + id, {
           column,
@@ -89,8 +91,8 @@ export default {
         });
     },
     updateTodo(todo) {
-      console.log(todo);
-      console.log('update');
+      this.error.active = false;
+
       axios
         .put(this.baseURL + '/todos/' + todo.id, {
           title: todo.title,
@@ -109,6 +111,8 @@ export default {
         });
     },
     reloadData() {
+      this.error.active = false;
+
       axios
         .get(this.baseURL + '/todos')
         .then(({ data }) => {
