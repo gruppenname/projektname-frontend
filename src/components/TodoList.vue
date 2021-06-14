@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <h2>{{ category }}</h2>
-
     <div :key="todo.id" v-for="todo in todos">
       <div
         v-if="category == todo.category"
@@ -13,7 +12,6 @@
             : 'done',
           'todoDefault',
         ]"
-        @dblclick="test"
         @mouseenter="showPen = todo.id"
         @mouseleave="showPen = ''"
       >
@@ -32,6 +30,7 @@
             :class="[
               todo.column == 'DONE' ? 'far fa-check-circle' : 'far fa-circle',
             ]"
+            title="Status ändern"
           ></i>
         </div>
         <div class="todoText" v-if="updateMode !== todo.id">
@@ -42,10 +41,12 @@
                 v-show="showPen == todo.id"
                 class="fas fa-pen"
                 @click="toggleUpdate(todo)"
+                title="Bearbeiten"
               ></i>
               <i
                 @click="$emit('delete-todo', todo.id)"
                 class="fas fa-times cross"
+                title="Löschen"
               ></i>
             </div>
           </h3>
@@ -56,8 +57,16 @@
             <input class="headerInput" type="text" v-model="inputTitle" />
             <input type="text" v-model="inputContent" />
           </div>
-          <i class="fas fa-check" @click="updateTodo(todo)"></i>
-          <i @click="toggleUpdate(todo)" class="fas fa-times cross"></i>
+          <i
+            class="fas fa-check"
+            @click="updateTodo(todo)"
+            title="Speichern"
+          ></i>
+          <i
+            @click="toggleUpdate(todo)"
+            class="fas fa-times cross"
+            title="Abbrechen"
+          ></i>
         </div>
       </div>
     </div>
@@ -80,9 +89,6 @@ export default {
     showAddTask: Boolean,
   },
   methods: {
-    test(id) {
-      console.log(id);
-    },
     toggleUpdate(todo) {
       this.updateMode == todo.id
         ? (this.updateMode = '')
@@ -96,7 +102,9 @@ export default {
         changed = true;
       }
       if (!changed) {
-        alert('Keine Änderungen gefunden');
+        alert(
+          'Keine Änderungen gefunden. Um zu speichern, muss zuerst etwas geändert werden.'
+        );
         return;
       }
       let changedTodo = {
