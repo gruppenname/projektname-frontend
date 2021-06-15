@@ -7,7 +7,8 @@ describe('App.vue', () => {
     wrapper = shallowMount(App, () => {});
   });
 
-  it('does div exist', () => {
-    expect(wrapper.find('button').text()).toBe('Aufgabe hinzufügen');
+  it('does button with id exist', () => {
+    const addButton = wrapper.find('#addButton');
+    expect(addButton.element.id).toBe('addButton');
   });
 });

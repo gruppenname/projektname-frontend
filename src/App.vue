@@ -6,7 +6,8 @@
         {{ error.message }}
       </div>
     </h1>
-    <button @click="toggleAddTodo">Aufgabe hinzufügen</button>
+    <button id="addButton" @click="toggleAddTodo">Aufgabe hinzufügen</button>
+    <button @click="throwingError">Ich werfe einen Fehler</button>
     <!-- for each category a new container to split them -->
     <div class="allCategories">
       <div class="oneCategorie" :key="category" v-for="category in categories">
@@ -52,6 +53,13 @@ export default {
     };
   },
   methods: {
+    throwingError() {
+      this.error = {
+        active: true,
+        message: 'Ein Fehler ist aufgetreten',
+      };
+      throw new Error('I am an error, please fix me.');
+    },
     addTodo(todo) {
       this.error.active = false;
       axios
@@ -175,6 +183,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin: 60px 30px 0 30px;
+}
+
+#addButton{
+  margin-right: 10px;
 }
 
 h1 {
