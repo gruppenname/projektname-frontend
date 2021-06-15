@@ -25,7 +25,6 @@ npm run build
 ```
 npm run lint
 ```
-Access the app from your browser at http://localhost:8080
 
 
 ## Deployment
