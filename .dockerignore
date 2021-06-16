@@ -1,0 +1,7 @@
+.github
+deployment
+dist
+node_modules
+.gitignore
+Dockerfile
+README.md
