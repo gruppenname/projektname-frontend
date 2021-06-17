@@ -10,5 +10,6 @@ describe('App.vue', () => {
   it('does button with id exist', () => {
     const addButton = wrapper.find('#addButton');
     expect(addButton.element.id).toBe('addButton');
+    
   });
 });
