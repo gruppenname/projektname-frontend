@@ -161,9 +161,7 @@ export default {
       );
     },
     toggleAddTodo() {
-      console.log('toggle')
       this.showAddTask = !this.showAddTask;
-      console.log("toggle2")
     },
   },
   components: {
@@ -171,7 +169,6 @@ export default {
     AddTask,
   },
   created() {
-    console.log("-------- "  + this.backendURL)
     axios.get(this.backendURL + '/todos').then(({ data }) => {
       this.todos = data.todos;
       this.filterCategories(this.todos);
