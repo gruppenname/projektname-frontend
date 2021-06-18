@@ -26,6 +26,13 @@ npm run build
 npm run lint
 ```
 
+## Ausführung der gesamten Applikation mit Docker-Compose
+1. clone das Backend (https://github.com/gruppenname/projektname-backend.git) in das gleiche Verzeichnis wie dieses Frontend
+2. Ändere im Frontend Dockerfile die Auskommentierung der ENV damit die lokale Backend-Url genutzt werden kann
+3. Stelle sicher dass dein Docker Daemon läuft
+4. Navigiere in deiner Konsole zum Backend-Ordner und führe `docker-compose build` und `docker-compose up` aus.
+
+
 
 ## Deployment
 Das Deployment findet in diesem Projekt über Kubernetes statt. Notwendig hierzu ist ein Clusterzugang für den ["Data Science Cluster"](https://labor.beuth-hochschule.de/ris/data-science-cluster/) der Beuth Hochschule für Technik Berlin und die Installation von kubectl.
