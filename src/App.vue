@@ -21,7 +21,7 @@
           :showAddTask="showAddTask"
         />
         <div v-if="showAddTask">
-          <div class="overlay" v-if="showAddTask" @click="toggleAddTodo"></div>
+          <div class="overlay" @click="toggleAddTodo"></div>
           <AddTask
             @add-todo="addTodo"
             :categoryOfList="category"
@@ -38,11 +38,12 @@ import './variables.css';
 import axios from 'axios';
 import TodoList from './components/TodoList';
 import AddTask from './components/AddTask';
+import BACKEND_URL from "./backend";
 export default {
   name: 'App',
   data() {
     return {
-      baseURL: 'https://gruppenname.demo.datexis.com',
+      backendURL: BACKEND_URL,
       todos: [],
       categories: [],
       showAddTask: false,
@@ -63,7 +64,7 @@ export default {
     addTodo(todo) {
       this.error.active = false;
       axios
-        .post(this.baseURL + '/todos', {
+        .post(this.backendURL + '/todos', {
           title: todo.title,
           content: todo.content,
           column: todo.column,
@@ -85,7 +86,7 @@ export default {
       this.error.active = false;
 
       axios
-        .put(this.baseURL + '/todos/' + id, {
+        .put(this.backendURL + '/todos/' + id, {
           column,
         })
         .then(() => {
@@ -102,7 +103,7 @@ export default {
       this.error.active = false;
 
       axios
-        .put(this.baseURL + '/todos/' + todo.id, {
+        .put(this.backendURL + '/todos/' + todo.id, {
           title: todo.title,
           content: todo.content,
           column: todo.column,
@@ -122,7 +123,7 @@ export default {
       this.error.active = false;
 
       axios
-        .get(this.baseURL + '/todos')
+        .get(this.backendURL + '/todos')
         .then(({ data }) => {
           this.todos = data.todos;
           this.filterCategories(this.todos);
@@ -136,7 +137,7 @@ export default {
     },
     deleteTodo(id) {
       if (confirm('Willst du diese Aufgabe wirklich löschen?'))
-        axios.delete(this.baseURL + '/todos/' + id).then(() => {
+        axios.delete(this.backendURL + '/todos/' + id).then(() => {
           this.todos = this.todos.filter((todo) => todo.id !== id);
           this.reloadData();
         });
@@ -168,7 +169,7 @@ export default {
     AddTask,
   },
   created() {
-    axios.get(this.baseURL + '/todos').then(({ data }) => {
+    axios.get(this.backendURL + '/todos').then(({ data }) => {
       this.todos = data.todos;
       this.filterCategories(this.todos);
     });
