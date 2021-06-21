@@ -6,7 +6,7 @@
         {{ error.message }}
       </div>
     </h1>
-    <!-- <button id="addButton" @click="toggleAddTodo">Aufgabe hinzufügen</button> -->
+    <button id="addButton" @click="toggleAddTodo">Aufgabe hinzufügen</button>
     <button @click="throwingError">Ich werfe einen Fehler</button>
     <!-- for each category a new container to split them -->
     <div class="allCategories">
